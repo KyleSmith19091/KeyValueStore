@@ -1,20 +1,15 @@
 #include <iostream>
 #include "../include/Stack.hpp"
 #include "../include/Node.hpp"
+#include "../include/Transaction.hpp"
 
 using namespace std;
 
 int main()
 {
-	Stack *s = new Stack();
-
-	s->push(new Node(3));
-	s->push(new Node(4));
-	s->push(new Node(5));
-	s->push(new Node(6));
-	s->pop();
-
-	std::cout << s->getStackString() << "\n";
+	// Transaction stack test
+	Stack<Transaction>* t = new Stack<Transaction>();
+	t->push(new Transaction("k","v"));
 
 	return 0;
 }
