@@ -5,10 +5,8 @@
 
 <h2>
 
-- [x] Add todo list
-
-- [x] Exaplanation
-
-- [x] Motivation for project
+- [] Add todo list
+- [] Exaplanation
+- [] Motivation for project
 
 </h2>
