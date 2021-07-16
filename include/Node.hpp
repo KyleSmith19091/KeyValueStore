@@ -1,14 +1,15 @@
 #ifndef NODE_HPP
 #define NODE_HPP
+template<class T>
 class Node
 {
-
 public:
 	Node *next;
-	int val;
-	Node(int v, Node *n = nullptr)
+	T *val;
+
+	Node(T v, Node *n = nullptr)
 	{
-		this->val = v;
+		this->val = new T(v);
 		this->next = n;
 	}
 
