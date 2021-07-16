@@ -1,6 +1,6 @@
 run:
-	g++ ./src/*.cpp -I ./include -o main
-	./main
+	g++ -std=c++11 ./src/*.cpp -I ./include -o ./build/main
+	./build/main
 
 clean:
-	rm -f main
+	rm -f ./build/main
