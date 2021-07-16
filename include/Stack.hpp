@@ -1,14 +1,17 @@
 #ifndef STACK_HPP
 #define STACK_HPP
+
 #include "Node.hpp"
+
+template<class T>
 class Stack
 {
 private:
 	// Top of stack
-	Node *top;
+	Node<T> *top;
 
 	// Bottom of stack
-	Node *bottom;
+	Node<T> *bottom;
 
 public:
 	// Default Constructor
@@ -19,9 +22,9 @@ public:
 	}
 
 	// Overloaded Constructor
-	Stack(Node *n)
+	Stack(Node<T> *n)
 	{
-		this->top = new Node(n);
+		this->top = new Node<T>(n);
 		this->bottom = this->top;
 	}
 
@@ -33,9 +36,9 @@ public:
 	}
 
 	// Push new node on to the stack
-	void push(Node *n)
+	void push(T *n)
 	{
-		Node *newNode = new Node(n);
+		Node<T> *newNode = new Node<T>(*n);
 
 		// Empty stack case
 		if (this->top == nullptr)
@@ -45,34 +48,31 @@ public:
 			this->bottom->next = this->top;
 			return;
 		}
-		else if (this->bottom == this->top) // One node case
-		{
-			this->top->next = newNode;
-			this->top = newNode;
-			return;
-		}
 
+		// Non empty stack
 		this->top->next = newNode;
 		this->top = newNode;
 	}
 
-	Node *pop()
+	// Remove top node from stack
+	Node<T> *pop()
 	{
+		// Removing from empty stack
 		if (this->top == nullptr)
 		{
 			std::cerr << "Popping off empty stack!\n";
 			return nullptr;
 		}
-		else if (this->top->next == this->bottom || this->bottom == this->top)
+		else if (this->top->next == this->bottom || this->bottom == this->top) // One node case
 		{
-			Node *oldHead = this->top;
+			Node<T> *oldHead = this->top;
 			this->top = nullptr;
 			this->bottom = nullptr;
 			return oldHead;
 		}
 
-		Node *oldHead = this->top;
-		Node *tempNode = this->bottom;
+		Node<T> *oldHead = this->top;
+		Node<T> *tempNode = this->bottom;
 		while (tempNode->next != oldHead)
 		{
 			tempNode = tempNode->next;
@@ -83,27 +83,9 @@ public:
 		return oldHead;
 	}
 
-	std::string getStackString()
-	{
-		if (this->top == nullptr)
-		{
-			return "";
-		}
-
-		if (this->top == this->bottom)
-		{
-			return std::to_string(this->top->val);
-		}
-
-		std::string sReturn = "";
-
-		Node *tempNode = this->bottom;
-		while (tempNode != nullptr)
-		{
-			sReturn += std::to_string(tempNode->val) + " ";
-			tempNode = tempNode->next;
-		}
-		return sReturn;
+	bool isEmpty() const noexcept {
+		return this->top == nullptr;
 	}
+
 };
 #endif
