@@ -1,23 +1,46 @@
 #include "../include/Interpreter.hpp"
 
-Statement Interpreter::parse(const std::string& input) const {
+Statement Interpreter::parse(const std::string& input) {
 	std::string operation;
 	std::string value;
 	std::stringstream ss(input);
 	getline(ss, operation,' ');
 	getline(ss,value,' ');
 
-	if(operation.length() > 0) {
-
-	} else {
-		throw std::invalid_argument("Invalid operation");
+	Operation op = getOperation(operation);
+	if(op == Operation::UNKNOWN) {
+		return Statement(Operation::UNKNOWN,-1);
 	}
 
-	if(value.length() > 0) {
+	Value v = determineValue(value);
+	if(v == Value::INVALID) {
+		return Statement(Operation::UNKNOWN,-1);
+	}
 
+	return Statement(op,stoi(value));
+}
+
+Operation Interpreter::getOperation(const std::string& operation) noexcept {
+	if(operation == "GET") {
+		return Operation::GET;
+	} else if(operation == "SET") {
+		return Operation::SET;
+	} else if(operation == "PUT") {
+		return Operation::PUT;
 	} else {
-		throw std::invalid_argument("Invalid value");
-	}  
+		return Operation::UNKNOWN;
+	}
+}
 
-	return Statement(Operation::GET,0);
+Value Interpreter::determineValue(const std::string& value) noexcept {
+	try
+	{
+		int val = stoi(value);
+	}
+	catch(const std::exception& e)
+	{
+		return Value::INVALID;
+	}
+	
+	return Value::VALID;
 }

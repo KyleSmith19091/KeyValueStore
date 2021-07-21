@@ -3,7 +3,9 @@
 
 enum Operation {
 	SET,
-	GET
+	GET,
+	PUT,
+	UNKNOWN
 };
 
 #endif

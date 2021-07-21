@@ -14,14 +14,18 @@
 #define INTERPRETER_HPP 
 
 #include "Statement.hpp"
+#include "Value.hpp"
 
 #include <string>
 
 class Interpreter {
 	private:
+		Operation getOperation(const std::string&) noexcept;
+		int getValue(const std::string&) noexcept;
+		Value determineValue(const std::string&) noexcept;
 
 	public:
-		Statement parse(const std::string&) const;
+		Statement parse(const std::string&);
 };
 
 #endif

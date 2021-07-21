@@ -11,6 +11,8 @@ std::string Statement::getString() noexcept {
 		operationString = "GET";		
 	} else if(this->operation == Operation::SET) {
 		operationString = "SET";
+	} else if(this->operation == Operation::PUT) {
+		operationString = "PUT";
 	} else {
 		operationString = "UNKNOWN";
 	}

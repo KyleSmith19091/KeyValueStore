@@ -9,10 +9,10 @@
 
 class Statement {
 	private: 
-		Operation operation;
-		int value;
 
 	public: 
+		Operation operation;
+		int value;
 		Statement(Operation op, int v);
 		std::string getString() noexcept;
 };
