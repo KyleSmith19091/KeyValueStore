@@ -18,11 +18,12 @@ void Shell::init() {
 	while (true) {
 		std::cout << prompt + " ";
 		getline(std::cin,input);
+		Statement s = interpreter.parse(input);
 
-		try {
-			Statement s = interpreter.parse(input);
-		} catch (const std::exception& e) {
-			std::cerr << e.what() << '\n';
+		if(s.operation != Operation::UNKNOWN) {
+			std::cerr << s.getString() << "\n";
+		} else {
+			std::cerr << "INVALID STATEMENT!\n";
 		}
 	}
 
