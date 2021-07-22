@@ -1,6 +1,6 @@
 <!-- Heading -->
 <div align="center">
-    <h1>Key Value Store Implmentation</h1>
+    <h1>Transactional Key Value Store Implmentation</h1>
 </div>
 
 <h2>
