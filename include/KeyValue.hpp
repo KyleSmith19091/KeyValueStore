@@ -15,7 +15,7 @@ class KeyValue {
 	public:
 		KeyValue();
 		~KeyValue();
-		void addTransaction();
+		void addTransaction(Transaction* t);
 };
 
 #endif
