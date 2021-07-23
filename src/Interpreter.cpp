@@ -35,7 +35,7 @@ Operation Interpreter::getOperation(const std::string& operation) noexcept {
 Value Interpreter::determineValue(const std::string& value) noexcept {
 	try
 	{
-		int val = stoi(value);
+		stoi(value);
 	}
 	catch(const std::exception& e)
 	{

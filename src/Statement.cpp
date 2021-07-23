@@ -16,6 +16,5 @@ std::string Statement::getString() noexcept {
 	} else {
 		operationString = "UNKNOWN";
 	}
-
 	return operationString + " " + std::to_string(this->value);
 }
