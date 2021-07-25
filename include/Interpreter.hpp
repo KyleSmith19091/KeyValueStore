@@ -21,8 +21,8 @@
 class Interpreter {
 	private:
 		Operation getOperation(const std::string&) noexcept;
-		int getValue(const std::string&) noexcept;
-		Value determineValue(const std::string&) noexcept;
+		Value getValue(const std::string&);
+		std::string getKey(const std::string&) noexcept;
 
 	public:
 		Statement parse(const std::string&);
