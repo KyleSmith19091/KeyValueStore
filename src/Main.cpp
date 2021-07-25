@@ -9,7 +9,7 @@ using namespace std;
 int main()
 {
 	// Interface into key-value store
-	Shell s(">");
+	Shell s("❯");
 	s.init();
 
 	return 0;
