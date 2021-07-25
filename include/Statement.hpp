@@ -12,11 +12,11 @@ class Statement {
 
 	public: 
 		Operation operation;
-		int value;
+		std::string value;
 		std::string key;
 		Statement(Operation);
 		Statement(Operation, std::string);
-		Statement(Operation, std::string, int);
+		Statement(Operation, std::string, std::string);
 		std::string getString() noexcept;
 };
 

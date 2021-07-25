@@ -3,16 +3,16 @@
 Statement::Statement(Operation op) {
 	this->operation = op;
 	this->key = "";
-	this->value = -1;
+	this->value = "";
 }
 
 Statement::Statement(Operation op, std::string k) {
 	this->operation = op;
 	this->key = k;
-	this->value = -1;
+	this->value = "";
 }
 
-Statement::Statement(Operation op, std::string k, int v) {
+Statement::Statement(Operation op, std::string k, std::string v) {
 	this->operation = op;
 	this->key = k;
 	this->value = v;
@@ -31,5 +31,5 @@ std::string Statement::getString() noexcept {
 	} else {
 		operationString = "UNKNOWN";
 	}
-	return operationString + " " + std::to_string(this->value);
+	return operationString + " " + this->value;
 }

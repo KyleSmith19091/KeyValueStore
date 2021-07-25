@@ -12,18 +12,18 @@ Transaction::Transaction(const Transaction& tx) {
 std::string Transaction::getTransactionString() const noexcept {
 	std::string output = "";
 	for(citer i = this->store.cbegin(); i != this->store.cend(); ++i){
-		output += "[" + i->first + "] => " + std::to_string(i->second) + "\n";	
+		output += "[" + i->first + "] => " + i->second + "\n";	
 	}
 	return output;
 }
 
 // Local store getter
-std::unordered_map<std::string,int> Transaction::getLocalStore() const noexcept {
+std::unordered_map<std::string,std::string> Transaction::getLocalStore() const noexcept {
 	return this->store;
 }
 
 // Read Statement
-int Transaction::readLocalStore(const Statement& s) const {
+std::string Transaction::readLocalStore(const Statement& s) const {
 	return get(s.key); 
 }
 
@@ -38,12 +38,12 @@ void Transaction::writeLocalStore(const Statement& s) {
 
 // Local store functions //
 // Set given key to value, can also be used to update
-void Transaction::set (const std::string& key, int value) {
+void Transaction::set (const std::string& key, const std::string& value) {
 	this->store[key] = value;
 }
 
 // Get value given key
-int Transaction::get (const std::string& key) const {
+std::string Transaction::get (const std::string& key) const {
 	return this->store.at(key);
 }
 

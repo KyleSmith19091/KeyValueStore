@@ -51,7 +51,7 @@ Statement Interpreter::parse(const std::string& input) {
 			return Statement(Operation::UNKNOWN);
 		} else {
 			if(getValue(value) == Value::VALID) { // Check that the value is numeric
-				return Statement(op,validKey,stoi(value));
+				return Statement(op,validKey,value);
 			} else {
 				return Statement(UNKNOWN);
 			}
@@ -89,11 +89,7 @@ std::string Interpreter::getKey(const std::string& k) noexcept {
 	return std::string();
 }
 
+// TODO: Might need to adapt this
 Value Interpreter::getValue(const std::string& value) {
-	try {
-		stoi(value);
-	} catch (const std::exception& e) {
-		return Value::INVALID;	
-	}
 	return Value::VALID;	
 }

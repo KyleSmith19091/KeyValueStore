@@ -51,7 +51,7 @@ void Shell::init() {
 			if(s.operation == Operation::GET) {
 				try
 				{
-					int value = tx->readLocalStore(s);
+					std::string value = tx->readLocalStore(s);
 					std::cerr << "= " <<  value << "\n";
 				}
 				catch(const std::out_of_range& e) {
