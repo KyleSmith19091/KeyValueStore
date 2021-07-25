@@ -60,7 +60,6 @@ public:
 		// Removing from empty stack
 		if (this->top == nullptr)
 		{
-			std::cerr << "Popping off empty stack!\n";
 			return nullptr;
 		}
 		else if (this->top->next == this->bottom || this->bottom == this->top) // One node case
@@ -81,6 +80,10 @@ public:
 		this->top = tempNode;
 		this->top->next = nullptr;
 		return oldHead;
+	}
+
+	Node<T>* peek() const noexcept {
+		return this->top;
 	}
 
 	bool isEmpty() const noexcept {
