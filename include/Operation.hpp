@@ -5,6 +5,9 @@ enum Operation {
 	SET,
 	GET,
 	PUT,
+	DELETE,
+	EXIT,
+	EMPTY,
 	UNKNOWN
 };
 
