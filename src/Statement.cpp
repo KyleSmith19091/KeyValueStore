@@ -1,7 +1,20 @@
 #include "../include/Statement.hpp"
 
-Statement::Statement(Operation op, int v) {
+Statement::Statement(Operation op) {
 	this->operation = op;
+	this->key = "";
+	this->value = -1;
+}
+
+Statement::Statement(Operation op, std::string k) {
+	this->operation = op;
+	this->key = k;
+	this->value = -1;
+}
+
+Statement::Statement(Operation op, std::string k, int v) {
+	this->operation = op;
+	this->key = k;
 	this->value = v;
 }
 
@@ -13,6 +26,8 @@ std::string Statement::getString() noexcept {
 		operationString = "SET";
 	} else if(this->operation == Operation::PUT) {
 		operationString = "PUT";
+	} else if(this->operation == Operation::DELETE) {
+		operationString = "DELETE";
 	} else {
 		operationString = "UNKNOWN";
 	}

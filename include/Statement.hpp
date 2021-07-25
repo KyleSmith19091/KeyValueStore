@@ -13,7 +13,10 @@ class Statement {
 	public: 
 		Operation operation;
 		int value;
-		Statement(Operation op, int v);
+		std::string key;
+		Statement(Operation);
+		Statement(Operation, std::string);
+		Statement(Operation, std::string, int);
 		std::string getString() noexcept;
 };
 
