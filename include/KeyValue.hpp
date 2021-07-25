@@ -16,6 +16,7 @@ class KeyValue {
 		KeyValue();
 		~KeyValue();
 		void addTransaction(Transaction* t);
+		Transaction* getActiveTransaction() const;
 };
 
 #endif

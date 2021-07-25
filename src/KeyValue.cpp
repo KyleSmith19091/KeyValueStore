@@ -12,4 +12,9 @@ void KeyValue::addTransaction(Transaction* t) {
 	transactions->push(t);	
 }
 
+Transaction* KeyValue::getActiveTransaction() const {
+	return transactions->peek() == nullptr ? nullptr : transactions->peek()->val;
+}
+
+
 
