@@ -8,6 +8,7 @@ enum Operation {
 	DELETE,
 	EXIT,
 	EMPTY,
+	PRINT,
 	UNKNOWN
 };
 
