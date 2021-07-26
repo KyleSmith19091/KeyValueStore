@@ -28,7 +28,7 @@ void Shell::init() {
 	});
 
 	// Active Transaction Pointer
-	Transaction* tx = new Transaction();
+	Transaction *tx = keyValue.getActiveTransaction();	
 
 	while (true) {
 		std::cout << prompt + " ";
@@ -39,32 +39,37 @@ void Shell::init() {
 			raise(SIGQUIT);
 		} else if(s.operation == Operation::EMPTY) { // No Input
 			continue;
+		} else if(s.operation == Operation::PRINT) { // Prints active transaction
+			if(tx != NULL) {
+				std::cerr << tx->getTransactionString() << "\n";
+			} else {
+				std::cerr << "** No Active Transaction **\n";
+			}
 		} else if(s.operation != Operation::UNKNOWN) { // Valid Input
-			tx = keyValue.getActiveTransaction();
 
 			if(tx == nullptr) { // No active transactions, create one
-				std::cerr << "** No Active Transaction\n** Creating One...\n";
 				tx = new Transaction();
 				keyValue.addTransaction(tx); // Push transaction onto stack
 			} 
 
-			if(s.operation == Operation::GET) {
+			if(s.operation == Operation::GET) { // Read operation
 				try
 				{
 					std::string value = tx->readLocalStore(s);
 					std::cerr << "= " <<  value << "\n";
 				}
 				catch(const std::out_of_range& e) {
-					std::cerr << "!! Key Not Found\n";
+					std::cerr << "!! Key Not Found !!\n";
 				}
 				
-			} else {
+			} else { // Must be a write operation then
 				tx->writeLocalStore(s);
 			}
 
 		} else {
 			std::cerr << "!! INVALID STATEMENT!\n";
 		}
+
 	}
 
 }
