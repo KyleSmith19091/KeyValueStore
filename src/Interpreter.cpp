@@ -1,4 +1,5 @@
 #include "../include/Interpreter.hpp"
+#include "../include/StringUtils.hpp"
 
 Statement Interpreter::parse(const std::string& input) {
 	std::string temp;
@@ -9,19 +10,18 @@ Statement Interpreter::parse(const std::string& input) {
 
 	int numArgs = -1;
 
-	while(getline(ss,temp,' ')) {
+	while(getline(ss,temp,' ')) { // Check for minimum number of arguments
 		if(numArgs == -1) {
 			operation = temp;	
+			operation = StringUtils::toUpperCase(operation);
 			numArgs++;
 		} else if(numArgs == 0) {
 			key = temp;
 			numArgs++;
-		} else if(numArgs == 1) {
-			value = temp;
-			numArgs++;
 		} else {
-			return Statement(Operation::UNKNOWN); // Too many arguments
-		}
+			value += temp + " ";
+			numArgs++;
+		} 
 	}
 	numArgs++;
 
@@ -32,6 +32,8 @@ Statement Interpreter::parse(const std::string& input) {
 		return Statement(Operation::EXIT);
 	} else if(op == Operation::EMPTY) {
 		return Statement(Operation::EMPTY);
+	} else if(op == Operation::PRINT) {
+		return Statement(Operation::PRINT);
 	}	
 
 	// Key must consist of alphabetic characters
@@ -46,7 +48,7 @@ Statement Interpreter::parse(const std::string& input) {
 		} else {
 			return Statement(op, validKey);
 		}
-	} else if (numArgs == 3) { // Three argument => Write operation
+	} else if (numArgs >= 3) { // Three argument => Write operation
 		if(op != Operation::SET && op != Operation::PUT) { // Must be write operation SET, PUT 
 			return Statement(Operation::UNKNOWN);
 		} else {
@@ -72,6 +74,8 @@ Operation Interpreter::getOperation(const std::string& operation) noexcept {
 		return Operation::DELETE;
 	}else if(operation == "EXIT") {
 		return Operation::EXIT; 
+	} else if(operation == "PRINT") {
+		return Operation::PRINT;
 	} else if(operation.empty()) {
 		return Operation::EMPTY;
 	} else {
