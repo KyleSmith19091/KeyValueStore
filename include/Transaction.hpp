@@ -22,6 +22,9 @@ class Transaction{
 		// Delete given key
 		void deleteKey (const std::string& key); 
 
+		// Update given key to value
+		void updateKey (const std::string& key, const std::string& value);
+
 	public:
 		// Start transaction with initial operation
 		Transaction() noexcept; 
@@ -29,8 +32,11 @@ class Transaction{
 		// Start transaction with context of previous transaction
 		Transaction(const Transaction&);
 
+		// Destructor
+		~Transaction();
+
 		// Wrapper around convertMapToString() for more 'semantic' code
-		std::string getTransactionString() const noexcept;
+		std::string getTransactionString();
 
 		// Local store getter
 		std::unordered_map<std::string,std::string> getLocalStore() const noexcept;
