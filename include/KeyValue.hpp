@@ -17,6 +17,9 @@ class KeyValue {
 		~KeyValue();
 		void addTransaction(Transaction* t);
 		Transaction* getActiveTransaction() const;
+		Transaction* removeTransaction();
+		int getNumTransactions();
+		void commitTransaction(Transaction* t);
 };
 
 #endif
