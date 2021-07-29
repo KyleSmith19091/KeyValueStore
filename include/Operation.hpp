@@ -9,6 +9,10 @@ enum Operation {
 	EXIT,
 	EMPTY,
 	PRINT,
+	BEGIN,
+	END,
+	COMMIT,
+	ROLLBACK,
 	UNKNOWN
 };
 
