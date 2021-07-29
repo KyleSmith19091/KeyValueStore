@@ -30,7 +30,7 @@ class Transaction{
 		Transaction() noexcept; 
 
 		// Start transaction with context of previous transaction
-		Transaction(const Transaction&);
+		Transaction(const Transaction*);
 
 		// Destructor
 		~Transaction();
@@ -44,7 +44,11 @@ class Transaction{
 		// GET statement to read data from store
 		std::string readLocalStore(const Statement&) const;
 
+		// Any statement that writes data to store
 		void writeLocalStore(const Statement&);
+
+		// Discard changes made to local store
+		void rollbackChanges();
 
 
 };

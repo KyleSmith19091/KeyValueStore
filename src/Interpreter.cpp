@@ -34,7 +34,15 @@ Statement Interpreter::parse(const std::string& input) {
 		return Statement(Operation::EMPTY);
 	} else if(op == Operation::PRINT) {
 		return Statement(Operation::PRINT);
-	}	
+	} else if(op == Operation::BEGIN) {
+		return Statement(Operation::BEGIN);
+	} else if(op == Operation::END) {
+		return Statement(Operation::END);
+	} else if(op == Operation::ROLLBACK) {
+		return Statement(Operation::ROLLBACK);
+	} else if(op == Operation::COMMIT) {
+		return Statement(Operation::COMMIT);
+	}
 
 	// Key must consist of alphabetic characters
 	std::string validKey = this->getKey(key);
@@ -76,6 +84,14 @@ Operation Interpreter::getOperation(const std::string& operation) noexcept {
 		return Operation::EXIT; 
 	} else if(operation == "PRINT") {
 		return Operation::PRINT;
+	} else if(operation == "BEGIN") {
+		return Operation::BEGIN;
+	} else if(operation == "COMMIT") {
+		return Operation::COMMIT;
+	} else if(operation == "ROLLBACK") {
+		return Operation::ROLLBACK;
+	} else if(operation == "END") {
+		return Operation::END;
 	} else if(operation.empty()) {
 		return Operation::EMPTY;
 	} else {

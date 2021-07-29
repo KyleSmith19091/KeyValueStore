@@ -5,8 +5,8 @@ Transaction::Transaction() noexcept {
 }
 
 // Start transaction with context of previous transaction
-Transaction::Transaction(const Transaction& tx) {	
-	this->store = tx.getLocalStore();
+Transaction::Transaction(const Transaction* tx) {	
+	this->store = std::unordered_map<std::string,std::string>(tx->getLocalStore());
 }
 
 // Destructor
@@ -67,4 +67,8 @@ void Transaction::deleteKey (const std::string& key) {
 // Update value for given key
 void Transaction::updateKey(const std::string& key, const std::string& value) {
 	this->store[key] = value;
+}
+
+void Transaction::rollbackChanges() {
+	this->store.clear();
 }
