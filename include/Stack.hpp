@@ -90,5 +90,21 @@ public:
 		return this->top == nullptr;
 	}
 
+	int size() {
+		if(this->top == nullptr) {
+			return 0;
+		} else if(this->top->next == this->bottom || this->bottom == this->top) {
+			return 1;
+		} else {
+			Node<T>* tempNode = this->bottom;
+			int counter = 1;
+			while(tempNode != this->top) {
+				tempNode = tempNode->next;
+				counter++;
+			}
+			return counter;
+		}
+	}
+
 };
 #endif
