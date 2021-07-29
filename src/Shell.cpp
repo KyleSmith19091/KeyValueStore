@@ -40,12 +40,33 @@ void Shell::init() {
 		} else if(s.operation == Operation::EMPTY) { // No Input
 			continue;
 		} else if(s.operation == Operation::PRINT) { // Prints active transaction
-			if(tx != NULL) {
+			if(tx != nullptr) { 
 				std::cerr << tx->getTransactionString() << "\n";
 			} else {
 				std::cerr << "** No Active Transaction **\n";
 			}
-		} else if(s.operation != Operation::UNKNOWN) { // Valid Input
+		} else if(s.operation == Operation::BEGIN) { // Starts a new transaction
+			tx = (tx == nullptr) ? new Transaction() : new Transaction(*tx);
+			keyValue.addTransaction(tx);
+			std::cerr << "ADDED NEW TRANSACTION\n";
+		} else if(s.operation == Operation::END) {
+			if(tx != nullptr) {
+				tx = keyValue.removeTransaction();
+				if(tx == nullptr) {
+					std::cerr << "** No Active Transaction **\n";
+				}
+			} else {
+				std::cerr << "** No Active Transaction **\n";
+			}
+		} else if(s.operation == Operation::ROLLBACK) {
+			if(tx != nullptr) {
+				tx->rollbackChanges();
+			}	
+		} else if(s.operation == Operation::COMMIT) {
+			if(tx != nullptr) {
+				keyValue.commitTransaction(tx);
+			}
+		}else if(s.operation != Operation::UNKNOWN) { // Valid Input
 
 			if(tx == nullptr) { // No active transactions, create one
 				tx = new Transaction();
