@@ -2,7 +2,7 @@
 
 namespace StringUtils {
 	std::string toUpperCase(std::string& str) {
-		int i;
+		int i = 0;
 		while(str[i]) {
 			str[i] = toupper(str[i]);
 			i++;
