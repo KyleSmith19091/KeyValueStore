@@ -14,6 +14,7 @@ class Statement {
 		Operation operation;
 		std::string value;
 		std::string key;
+		Statement();
 		Statement(Operation);
 		Statement(Operation, std::string);
 		Statement(Operation, std::string, std::string);
