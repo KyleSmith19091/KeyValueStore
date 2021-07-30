@@ -29,8 +29,13 @@ Statement Interpreter::parse(const std::string& input) {
 	}
 
 	if (numArgs == 2) { // If number arguments is two, we either GET || DELETE 
-		return prepareReadStatement(op,validKey);
+		return prepareBinaryStatement(op,validKey);
 	} else if (numArgs >= 3) { // Three arguments => Write operation
+
+		if(op == Operation::GET || op == Operation::DELETE) { // Check for attempt of binary operation
+			throw std::invalid_argument("Invalid Key: Keys must not contain spaces");
+		}
+
 		return prepareWriteStatement(op,validKey,value);
 	}
 
@@ -62,6 +67,8 @@ Operation Interpreter::getOperation(const std::string& operation) const noexcept
 		return Operation::END;
 	} else if(operation.empty()) {
 		return Operation::EMPTY;
+	} else if(operation == "CLEAR") {
+		return Operation::CLEAR;	
 	} else {
 		return Operation::UNKNOWN;
 	}
@@ -124,12 +131,14 @@ bool Interpreter::isUnaryOperation(const Operation& op) const noexcept {
 		return !isUnary;
 	} else if(op == Operation::COMMIT) {
 		return !isUnary;
+	} else if(op == Operation::CLEAR) {
+		return !isUnary;
 	}
 	return isUnary;
 }
 
 // Prepare a statement object to represent a read
-Statement Interpreter::prepareReadStatement(const Operation& op, const std::string& key) const noexcept {
+Statement Interpreter::prepareBinaryStatement(const Operation& op, const std::string& key) const noexcept {
 	if (op != Operation::GET && op != Operation::DELETE) { // If we don't GET || DELETE ==> ERROR
 		return Statement(Operation::UNKNOWN);
 	} else {

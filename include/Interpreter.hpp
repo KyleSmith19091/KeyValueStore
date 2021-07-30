@@ -13,7 +13,7 @@ class Interpreter {
 		std::string getKey(const std::string&) const noexcept;
 		void tokenise(const std::string&, std::string&, std::string&, std::string&, int&);
 		bool isUnaryOperation(const Operation&) const noexcept;
-		Statement prepareReadStatement(const Operation&, const std::string&) const noexcept;
+		Statement prepareBinaryStatement(const Operation&, const std::string&) const noexcept;
 		Statement prepareWriteStatement(const Operation&, const std::string&, const std::string&) const noexcept;
 
 	public:
