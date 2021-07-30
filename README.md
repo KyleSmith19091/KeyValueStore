@@ -12,7 +12,7 @@ This is an <strong>in progress implmentation</strong> of a transactional Key-Val
 
 * Building from sratch
 
-This is requires a g++ compiler, that is also able to compile c++ 11
+This requires a g++ compiler, that is also able to compile c++ 11
 ```bash
 make
 ```
@@ -25,10 +25,10 @@ You'll then be presented with the following prompt
 > 
 ```
 
-This 'mini-shell' environment will serve as you interface into the key-value store
+This 'mini-shell' environment will serve as your interface into the key-value store
 
 ## CRUD Operations ⭐️
-<strong>** Note, keys are case sensitive, but the operations are not</strong>
+<strong>** Note, keys are case sensitive, but the operations are not.</strong>
 
 <h4 align="center">READ</h4>
 
@@ -41,9 +41,13 @@ This 'mini-shell' environment will serve as you interface into the key-value sto
 > SET KEY VALUE
 ```
 
-<strong>** In this case the value can be anything, the interpreter will assume that all input after the given KEY is the value.</strong>
+<strong>** In this case the value can be anything, the interpreter will assume that all input after the given KEY is the value. This does include space seperated data.</strong>
 
-<strong>** Space seperated data will include the spaces in the store. </strong>
+<strong>For Ex.</strong>
+
+```bash
+> SET full-name John Smith II
+```
 
 <h4 align="center">UPDATE</h4>
 
@@ -51,12 +55,39 @@ This 'mini-shell' environment will serve as you interface into the key-value sto
 > PUT KEY VALUE
 ```
 
-** SET can also be used as a PUT, it will overwrite the key's value
+<strong>** SET can also be used as a PUT, it will overwrite the key's value</strong>
 
 <h4 align="center">DELETE</h4>
 
 ```bash
 > DELETE KEY
+```
+
+## Transactional Operations 🚦 
+Since this is a transactional key-value store implementation, we need the ability to create, end, rollback and commit transactions. Transactions are handled using a Stack, where the 
+top of the stack represents the <i>active</i> transaction.
+
+<h4 align="center">BEGIN: Starts a new transaction</h4>
+
+```bash
+> BEGIN
+```
+
+<h4 align="center">END: Ends the current active transaction</h4>
+
+```bash
+> END
+```
+<h4 align="center">ROLLBACK: Discards the changes made by current transaction</h4>
+
+```bash
+> ROLLBACK
+```
+
+<h4 align="center">COMMIT: Commits the changes made by active transaction to global store</h4>
+
+```bash
+> ROLLBACK
 ```
 
 ## Other Operations 🧪
