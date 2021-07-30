@@ -2,76 +2,40 @@
 #include "../include/StringUtils.hpp"
 
 Statement Interpreter::parse(const std::string& input) {
-	std::string temp;
 	std::string operation = "";
-	std::string value = "";
 	std::string key = "";
-	std::stringstream ss(input);
-
+	std::string value = "";
 	int numArgs = -1;
 
-	while(getline(ss,temp,' ')) { // Check for minimum number of arguments
-		if(numArgs == -1) {
-			operation = temp;	
-			operation = StringUtils::toUpperCase(operation);
-			numArgs++;
-		} else if(numArgs == 0) {
-			key = temp;
-			numArgs++;
-		} else {
-			value += temp + " ";
-			numArgs++;
-		} 
-	}
-	numArgs++;
+	// Tokenise the input
+	tokenise(input,operation,key,value,numArgs);
 
+	// Get Operation type
 	Operation op = getOperation(operation);
-	if(op == Operation::UNKNOWN) {
-		return Statement(Operation::UNKNOWN);
-	}else if(op == Operation::EXIT) {
-		return Statement(Operation::EXIT);
-	} else if(op == Operation::EMPTY) {
-		return Statement(Operation::EMPTY);
-	} else if(op == Operation::PRINT) {
-		return Statement(Operation::PRINT);
-	} else if(op == Operation::BEGIN) {
-		return Statement(Operation::BEGIN);
-	} else if(op == Operation::END) {
-		return Statement(Operation::END);
-	} else if(op == Operation::ROLLBACK) {
-		return Statement(Operation::ROLLBACK);
-	} else if(op == Operation::COMMIT) {
-		return Statement(Operation::COMMIT);
+
+	// Check if we have an unary operation
+	if(isUnaryOperation(op)) {
+		return Statement(op); // Statement complete
 	}
 
-	// Key must consist of alphabetic characters
+	// Key must consist of only alphabetic characters
 	std::string validKey = this->getKey(key);
-	if(validKey.empty()) {
+	if(validKey.empty()) { // Indicates a non-valid string
 		return Statement(Operation::UNKNOWN);
 	}
 
 	if (numArgs == 2) { // If number arguments is two, we either GET || DELETE 
-		if (op != Operation::GET && op != Operation::DELETE) { // If we don't GET || DELETE ==> ERROR
-			return Statement(Operation::UNKNOWN);
-		} else {
-			return Statement(op, validKey);
-		}
-	} else if (numArgs >= 3) { // Three argument => Write operation
-		if(op != Operation::SET && op != Operation::PUT) { // Must be write operation SET, PUT 
-			return Statement(Operation::UNKNOWN);
-		} else {
-			if(getValue(value) == Value::VALID) { // Check that the value is numeric
-				return Statement(op,validKey,value);
-			} else {
-				return Statement(UNKNOWN);
-			}
-		}
+		return prepareReadStatement(op,validKey);
+	} else if (numArgs >= 3) { // Three arguments => Write operation
+		return prepareWriteStatement(op,validKey,value);
 	}
 
+	// Undefined Operation
 	return Statement(Operation::UNKNOWN);
 }
 
-Operation Interpreter::getOperation(const std::string& operation) noexcept {
+// Determine operation type from string
+Operation Interpreter::getOperation(const std::string& operation) const noexcept {
 	if(operation == "GET") {
 		return Operation::GET;
 	} else if(operation == "SET") {
@@ -99,17 +63,85 @@ Operation Interpreter::getOperation(const std::string& operation) noexcept {
 	}
 }
 
-std::string Interpreter::getKey(const std::string& k) noexcept {
+// Determine if key consists of alphabetic characters
+std::string Interpreter::getKey(const std::string& k) const noexcept {
+	bool valid = true;
 	for (size_t i = 0; i < k.length(); i++) {
 		int c = (int)k[i];
-		if((c >= 65 && c <= 90) || (c >= 97 && c <= 122)) { 
-			return k;	
+		if(!isalpha(c)) { 
+			return std::string();
 		} 
 	}
-	return std::string();
+	return k;
 }
 
 // TODO: Might need to adapt this
-Value Interpreter::getValue(const std::string& value) {
+Value Interpreter::getValue(const std::string& value) const noexcept {
 	return Value::VALID;	
+}
+
+// Tokenise => Extract Operation, key, value and number of arguments from input
+void Interpreter::tokenise(const std::string& input, std::string& operation, std::string& key, std::string& value, int& numArgs) {
+	std::string temp;
+	std::stringstream ss(input);
+
+	while(getline(ss,temp,' ')) { 
+		if(numArgs == -1) {
+			operation = temp;	
+			operation = StringUtils::toUpperCase(operation);
+			numArgs++;
+		} else if(numArgs == 0) {
+			key = temp;
+			numArgs++;
+		} else { // Read rest of the input
+			value += temp + " ";
+			numArgs++;
+		} 
+	}
+	numArgs++;
+}
+
+// Prepare statement from unary operation
+bool Interpreter::isUnaryOperation(const Operation& op) const noexcept {
+	bool isUnary = false;
+	if(op == Operation::UNKNOWN) {
+		return !isUnary;
+	}else if(op == Operation::EXIT) {
+		return !isUnary;
+	} else if(op == Operation::EMPTY) {
+		return !isUnary;
+	} else if(op == Operation::PRINT) {
+		return !isUnary;
+	} else if(op == Operation::BEGIN) {
+		return !isUnary;
+	} else if(op == Operation::END) {
+		return !isUnary;
+	} else if(op == Operation::ROLLBACK) {
+		return !isUnary;
+	} else if(op == Operation::COMMIT) {
+		return !isUnary;
+	}
+	return isUnary;
+}
+
+// Prepare a statement object to represent a read
+Statement Interpreter::prepareReadStatement(const Operation& op, const std::string& key) const noexcept {
+	if (op != Operation::GET && op != Operation::DELETE) { // If we don't GET || DELETE ==> ERROR
+		return Statement(Operation::UNKNOWN);
+	} else {
+		return Statement(op, key);
+	}
+}
+
+// Prepare a statement object to represent a write
+Statement Interpreter::prepareWriteStatement(const Operation& op, const std::string& key, const std::string& value) const noexcept {
+	if(op != Operation::SET && op != Operation::PUT) { // Must be write operation SET, PUT 
+			return Statement(Operation::UNKNOWN);
+		} else {
+			if (getValue(value) == Value::VALID) { 
+				return Statement(op,key,value);
+			} else {
+				return Statement(UNKNOWN);
+			}
+	}
 }
