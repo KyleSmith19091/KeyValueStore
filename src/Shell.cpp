@@ -33,7 +33,15 @@ void Shell::init() {
 	while (true) {
 		std::cout << prompt + " ";
 		getline(std::cin,input);
-		Statement s = interpreter.parse(input);
+
+		Statement s;
+
+		try {
+			s = interpreter.parse(input);
+		} catch(const std::exception& e) {
+			std::cerr << "!! " << e.what() << " !!\n";
+			continue;
+		}
 
 		if(s.operation == Operation::EXIT) { // EXIT 
 			raise(SIGQUIT);
