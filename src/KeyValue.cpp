@@ -35,6 +35,11 @@ int KeyValue::getNumTransactions() { // O(n), n is num transactions
 void KeyValue::commitTransaction(Transaction* t) { // O(m), m is number of operations in transaction
 	std::unordered_map<std::string,std::string> m = t->getLocalStore();
 
+	if(m.size() == 0) {
+		std::cerr << "** Nothing to commit **\n";
+		return;
+	}
+
 	for(std::unordered_map<std::string,std::string>::iterator it = m.begin(); it != m.end(); ++it) {
 		try {
 			this->globalStore.at(it->first);
