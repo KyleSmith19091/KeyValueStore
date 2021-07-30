@@ -13,7 +13,8 @@ enum Operation {
 	END,
 	COMMIT,
 	ROLLBACK,
-	UNKNOWN
+	UNKNOWN,
+	CLEAR
 };
 
 #endif
