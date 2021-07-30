@@ -65,6 +65,8 @@ void Shell::init() {
 		} else if(s.operation == Operation::COMMIT) {
 			if(tx != nullptr) {
 				keyValue.commitTransaction(tx);
+				tx = keyValue.removeTransaction();
+				std::cerr << keyValue.getGlobalStoreString() << "\n";
 			}
 		}else if(s.operation != Operation::UNKNOWN) { // Valid Input
 
