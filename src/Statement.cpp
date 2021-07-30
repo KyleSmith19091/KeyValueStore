@@ -1,5 +1,7 @@
 #include "../include/Statement.hpp"
 
+Statement::Statement() {}
+
 Statement::Statement(Operation op) {
 	this->operation = op;
 	this->key = "";
