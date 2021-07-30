@@ -20,6 +20,7 @@ class KeyValue {
 		Transaction* removeTransaction();
 		int getNumTransactions();
 		void commitTransaction(Transaction* t);
+		std::string getGlobalStoreString();
 };
 
 #endif
