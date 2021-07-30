@@ -15,13 +15,17 @@ Statement Interpreter::parse(const std::string& input) {
 
 	// Check if we have an unary operation
 	if(isUnaryOperation(op)) {
-		return Statement(op); // Statement complete
+		if(numArgs > 1) { // Unary operation takes no arguments
+			throw std::invalid_argument("Unary Operator: Too Many Arguments");
+		} else {
+			return Statement(op); // Statement complete
+		}
 	}
 
 	// Key must consist of only alphabetic characters
 	std::string validKey = this->getKey(key);
 	if(validKey.empty()) { // Indicates a non-valid string
-		return Statement(Operation::UNKNOWN);
+		throw std::invalid_argument("Invalid Key: Key should only consist of alphabetic characters");
 	}
 
 	if (numArgs == 2) { // If number arguments is two, we either GET || DELETE 
