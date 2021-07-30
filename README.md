@@ -92,6 +92,13 @@ top of the stack represents the <i>active</i> transaction.
 
 ## Other Operations 🧪
 
+<h4 align="center">CLEAR</h4>
+To clear the 'shell'
+
+```bash	
+> CLEAR
+```
+
 <h4 align="center">EXIT</h4>
 To gracefully exit the shell, CTRL+C or your equivalent will also work
 
