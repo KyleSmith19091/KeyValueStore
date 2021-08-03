@@ -77,11 +77,13 @@ class Transaction{
 				} catch(const std::out_of_range& e) {
 					set(s.key, s.value);
 				}
-				} else if(s.operation == Operation::DELETE) {
-					deleteKey(s.key);
-				} else {
-					std::cerr << "!! Undefined Write Operation\n";
-				}
+			} else if(s.operation == Operation::DELETE) {
+				deleteKey(s.key);
+			} else if(s.operation == Operation::PUT) {
+				updateKey(s.key, s.value);
+			} else {
+				std::cerr << "!! Undefined Write Operation\n";
+			}
 		};
 
 		// Discard changes made to local store
