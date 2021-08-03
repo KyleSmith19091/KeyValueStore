@@ -13,6 +13,10 @@ Statement Interpreter::parse(const std::string& input) {
 	// Get Operation type
 	Operation op = getOperation(operation);
 
+	if(op == Operation::UNKNOWN) {
+		throw std::runtime_error("Unknown operation");
+	}
+
 	// Check if we have an unary operation
 	if(isUnaryOperation(op)) {
 		if(numArgs > 1) { // Unary operation takes no arguments
@@ -115,9 +119,7 @@ void Interpreter::tokenise(const std::string& input, std::string& operation, std
 // Prepare statement from unary operation
 bool Interpreter::isUnaryOperation(const Operation& op) const noexcept {
 	bool isUnary = false;
-	if(op == Operation::UNKNOWN) {
-		return !isUnary;
-	}else if(op == Operation::EXIT) {
+	if(op == Operation::EXIT) {
 		return !isUnary;
 	} else if(op == Operation::EMPTY) {
 		return !isUnary;
