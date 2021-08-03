@@ -1,5 +1,7 @@
 #include "../include/Shell.hpp"
 
+#define DEBUG
+
 // Give Shell custom prompt value
 Shell::Shell(const std::string& prompt) {
 	this->prompt = prompt;
@@ -45,7 +47,7 @@ void Shell::init() {
 		}else if(s.operation != Operation::UNKNOWN) {     // Valid Input
 			readWriteOperation(s,keyValue,tx);
 		} else {									      // Invalid Operation hit	
-			std::cerr << "!! INVALID STATEMENT!\n";
+			showOutput("INVALID STATEMENT",true);
 		}
 	}
 
@@ -81,7 +83,19 @@ void Shell::createSignalListeners() {
 
 // Show prompt to user in stdout
 void Shell::printPrompt() {
-	std::cout << prompt + " ";
+	std::time_t t = std::time(0); 
+	std::tm* now = std::localtime(&t);
+	std::cout << BGRN << now->tm_hour << ":" << now->tm_min << reset << " ";
+	std::cout << BLU << prompt + " " << reset;
+}
+
+// Shows user output to error stream rather std::out
+void Shell::showOutput(const std::string& output, const bool error) {
+	if(error) {
+		std::cerr << BRED << "!! " << output << "\n";
+	} else {
+		std::cerr << BGRN << output << "\n";
+	}	
 }
 
 // Get and parse user input to a Statement
@@ -90,7 +104,7 @@ Statement Shell::getUserInput(std::string& input, Interpreter& interpreter) {
 	try {
 		return interpreter.parse(input);
 	} catch(const std::exception& e) {
-		std::cerr << "!! " << e.what() << " !!\n";
+		showOutput(e.what(), true);
 		return Statement(Operation::UNKNOWN);
 	}
 }
@@ -98,9 +112,9 @@ Statement Shell::getUserInput(std::string& input, Interpreter& interpreter) {
 // Print local store from active transaction  
 void Shell::showActiveTransaction(Transaction*& tx) {
 	if(tx != nullptr) { 
-		std::cerr << tx->getTransactionString() << "\n";
+		showOutput(tx->getTransactionString());
 	} else {
-		std::cerr << "** No Active Transaction **\n";
+		showOutput("No Active Transaction",true);
 	}
 }
 
@@ -108,18 +122,15 @@ void Shell::showActiveTransaction(Transaction*& tx) {
 void Shell::startNewTransaction(KeyValue& keyValue, Transaction*& tx) {
 	tx = (tx == nullptr) ? new Transaction() : new Transaction(*tx);
 	keyValue.addTransaction(tx);
-	std::cerr << "ADDED NEW TRANSACTION\n";
+	showOutput("New Transaction Added");
 }
 
 // End the current active transaction
 void Shell::endTransaction(KeyValue& keyValue, Transaction*& tx) {
 	if(tx != nullptr) {
 		tx = keyValue.removeTransaction();
-		if(tx == nullptr) {
-			std::cerr << "** No Active Transaction **\n";
-		}
 	} else {
-		std::cerr << "** No Active Transaction **\n";
+		showOutput("No Active Transaction",true);
 	}
 }
 
@@ -133,9 +144,16 @@ void Shell::rollbackTransaction(Transaction*& tx) {
 // Commit the changes made in local store of the current transaction to global store
 void Shell::commitTransaction(KeyValue& keyValue, Transaction*& tx) {
 	if(tx != nullptr) {
+		// Add data to global store
 		keyValue.commitTransaction(tx);
+
+		// Pop transaction off stack
 		tx = keyValue.removeTransaction();
-		std::cerr << keyValue.getGlobalStoreString() << "\n";
+
+		// Printing for debugging
+		#ifdef DEBUG
+			showOutput(keyValue.getGlobalStoreString());
+		#endif
 	}
 }
 
@@ -149,9 +167,9 @@ void Shell::readWriteOperation(Statement& s, KeyValue& keyValue, Transaction*& t
 	if(s.operation == Operation::GET) { // Read operation
 		try {
 			std::string value = tx->readLocalStore(s);
-			std::cerr << "= " <<  value << "\n";
+			std::cerr << value << "\n";
 		} catch(const std::out_of_range& e) {
-			std::cerr << "!! Key Not Found !!\n";
+			showOutput("Key Not Found",true);
 		}
 	} else { // Must be a write operation then
 		tx->writeLocalStore(s);
